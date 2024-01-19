@@ -1,0 +1,66 @@
+DATA:
+  data_dir: ../refer/data
+  dataset: refcoco+
+  splitby: unc
+  train_split: train
+  val_split: val
+TRAIN:
+  # Base Arch
+  clip_pretrain: pretrain/ViT-B-16.pt
+  pretrained_lm: pretrain/bert-small
+  input_size: 384
+  word_len: 20
+  vision_model:
+    pretrained_vm: pretrain/vit-s-16-384.npz
+    backbone: vit_small_patch16_384
+    dropout: 0
+    drop_path_rate: 0.1
+    image_size: [384,384]
+    patch_size: 16
+    d_model: 384
+    #d_model: 512
+    n_heads: 6
+    n_layers: 12
+    normalization: vit
+    distilled: false
+  word_dim: 512
+  proj_dim: 1024
+  contrast_dim: 2048
+  sync_bn: True
+  # Decoder
+  num_layers: 3
+  num_head: 8
+  dim_ffn: 2048
+  dropout: 0.1
+  intermediate: False
+  # Training Setting
+  workers: 16  # data loader workers
+  workers_val: 16
+  epochs: 200
+  milestones: []
+  start_epoch: 0
+  batch_size: 32 # batch size for training
+  batch_size_val: 32  # batch size for validation during training, memory and speed tradeoff
+  base_lr: 1.0e-2
+  lr_decay: 0
+  weight_decay: 1.0e-4
+  max_norm: 0.
+  manual_seed: 0
+  print_freq: 250
+  # Resume & Save
+  exp_name: clip_sam_testB_blip
+  output_folder: /data1/yucheng/ris_exp/refcocop
+  save_freq: 50
+  weight:  # path to initial weight (default: none)
+  resume:  # path to latest checkpoint (default: none)
+  evaluate: True  # evaluate on validation set, extra gpu memory needed and small batch_size_val is recommend
+Distributed:
+  dist_url: tcp://localhost:3684
+  dist_backend: 'nccl'
+  multiprocessing_distributed: True
+  world_size: 1
+  rank: 0
+TEST:
+  test_split: testB
+  visualize: True
+  vis_dir: ./visual
