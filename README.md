@@ -15,8 +15,9 @@ Implementation of the paper Text Augmented Spatial-aware Zero-shot Referring Ima
 4. Install the environment requirements (pip install -r requirements.txt). For syntactic parsing tools, you need to manually install some extension (en-core-web-trf in spacy, wordnet in nltk) 
 
 #### Usage
-
+```
 python tas_main.py --config config/refcoco/refcoco_val.json
+```
 
 #### Acknowledgements
 
